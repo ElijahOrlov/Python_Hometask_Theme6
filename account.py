@@ -185,9 +185,9 @@ class Account:
     def withdraw(self, amount: decimal, show_log: bool = False) -> decimal:
         """
         Снять деньги со счета
-        :param amount: Сумма для снятия со счета
+        :param amount: сумма для снятия со счета
         :param show_log: показать лог по операции
-        :return: Текущий баланс по счету
+        :return: текущий баланс по счету
         """
         if amount == 0:
             error = AccountLogger.error_log(f"Запрашиваемая сумма не указана!")
@@ -206,9 +206,9 @@ class Account:
     def deposit(self, amount: decimal, show_log: bool = False) -> decimal:
         """
         Зачислить деньги на счет
-        :param amount: Сумма для внесения на счет
+        :param amount: сумма для внесения на счет
         :param show_log: показать лог по операции
-        :return: Текущий баланс по счету
+        :return: текущий баланс по счету
         """
         if amount == 0:
             error = AccountLogger.error_log(f"Запрашиваемая сумма не указана!")
@@ -220,13 +220,13 @@ class Account:
         self.__log(AccountOperationCode.DEPOSIT_BALANCE_CODE, "Зачисление средств на счёт", amount, show_log)
         return self.__balance
 
-    def __log(self, code: AccountOperationCode, operation: str, amount: decimal = None,
-              show_log: bool = False) -> AccountLogger:
+    def __log(self, code: AccountOperationCode, operation: str, amount: decimal = None, show_log: bool = False) -> AccountLogger:
         """
-        Внести запись в историю операций со счетом
+        Добавить запись с логом выполнения операции в историю операций со счетом
         :param code: код операции
         :param operation: тип операции
         :param amount: сумма средств по операции
+        :param show_log: показать лог по операции
         :return: добавленный в историю объект лога
         """
         log = AccountLogger(code, operation, amount, self.__balance)
@@ -235,7 +235,13 @@ class Account:
             print(log)
         return log
 
-    def show_history(self, operation_code: AccountOperationCode = None, date: tuple[datetime, str] = None):
+    def show_history(self, operation_code: AccountOperationCode = None, date: tuple[datetime, str] = None) -> None:
+        """
+        Внести историю операций по счету
+        :param operation_code: фильтр по коду операции
+        :param date: фильтр по дате (кортеж с датой и знаком сравнения) (<dateime>, <"<=">)
+        :return: отфильтрованный список операций
+        """
         for log in self.__history:
             if operation_code is not None and log.code != operation_code:
                 continue
